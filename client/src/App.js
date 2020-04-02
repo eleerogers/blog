@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 import './App.css';
 
 function App() {
@@ -21,7 +23,8 @@ function App() {
     
 
   return (
-    <div className="App">
+    <div className="container App">
+      <Navbar />
       {/* Render the passwords if we have them */}
       {passwords.length ? (
         <div>
@@ -56,6 +59,7 @@ function App() {
           </button>
         </div>
       )}
+      <Footer />
     </div>
   );
 }
