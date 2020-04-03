@@ -3,22 +3,40 @@ import { Switch, Route } from 'react-router-dom';
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import Home from "./components/home";
-import About from "./components/about";
+import Info from "./components/info";
 import Compose from "./components/compose";
-import Contact from "./components/contact";
 import Post from './components/post';
 import './App.css';
 import axios from 'axios';
 
 function App() {    
   const [posts, setPosts] = useState([]);
+  const [pageInfos, setPageInfos] = useState({
+    homeStartingContent: "",
+    aboutContent: "",
+    contactContent: ""
+  });
+  
+  const {homeStartingContent, aboutContent, contactContent} = pageInfos;
   
   useEffect(() => {
     async function getPosts() {
       const {data} = await axios.get('/api/posts');
       setPosts(data);
     }
-    getPosts();
+    getPosts(); 
+  }, [])
+
+  useEffect(() => {
+    async function fetchPageInfos() {
+      try {
+        const {data} = await axios('/api/pageInfos');
+        setPageInfos(data);
+      } catch(err) {
+        console.error(err);
+      }
+    }
+    fetchPageInfos();
   }, [])
 
   return (
@@ -27,16 +45,16 @@ function App() {
       <div className="container">
         <Switch>
           <Route exact path="/">
-            <Home posts={posts} />
+            <Home homeStartingContent={homeStartingContent} posts={posts} />
           </Route>
           <Route path="/about">
-            <About />
+            <Info content={aboutContent} />
           </Route>
           <Route path="/compose">
             <Compose setPosts={setPosts} />
           </Route>
           <Route path="/contact">
-            <Contact />
+            <Info content={contactContent} />
           </Route>
           <Route path="/post/:id">
             <Post />

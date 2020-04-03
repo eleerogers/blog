@@ -1,28 +1,12 @@
-import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import React from "react";
 import Posts from './posts';
+import Info from './info';
 
-function Home({posts}) {
-  const [text, setText] = useState("");
-
-  useEffect(() => {
-    async function fetchData() {
-      console.log('fetchData')
-      try {
-        const {data} = await axios('/api/home');
-        console.log({data});
-        setText(data);
-      } catch(err) {
-        console.error(err);
-      }
-    }
-    fetchData();
-  }, [])
+function Home({posts, homeStartingContent}) {
 
   return (
     <>
-      <h1>Home</h1>
-      <p>{text}</p>
+      <Info content={homeStartingContent} />
       <Posts posts={posts} />
     </>
   )

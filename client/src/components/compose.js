@@ -9,7 +9,6 @@ function Compose({setPosts, history}) {
   async function addPost() {
     try {
       const {data} = await axios.post('/api/posts', values);
-      console.log({data})
       setPosts(data);
       history.push('/');
     } catch(err) {
@@ -21,21 +20,30 @@ function Compose({setPosts, history}) {
     <>
       <h1>Compose</h1>
       <form onSubmit={handleSubmit}>
-        <input 
-          placeholder="Title" 
-          type="text" 
-          name="title" 
-          value={values.title || ""} 
-          onChange={handleChange} 
-        /> <br />
-        <input 
-          placeholder="Post" 
-          type="text" 
-          name="post" 
-          value={values.post || ""} 
-          onChange={handleChange} 
-        /> <br />
-        <button type="submit">Post</button>
+        <div className="form-group">
+          <label htmlFor="title">Title</label>
+          <input 
+            id="title" 
+            name="title" 
+            type="text" 
+            value={values.title || ""} 
+            className="form-control" 
+            onChange={handleChange} 
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="post">Post</label>
+          <textarea
+            rows="4"
+            id="post"
+            name="post"
+            type="text"
+            value={values.post || ""}
+            className="form-control"
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">Publish</button>
       </form>
     </>
   )
