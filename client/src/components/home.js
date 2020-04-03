@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import Posts from './posts';
 
 function Home({posts}) {
   const [text, setText] = useState("");
 
   useEffect(() => {
     async function fetchData() {
+      console.log('fetchData')
       try {
         const {data} = await axios('/api/home');
+        console.log({data});
         setText(data);
       } catch(err) {
         console.error(err);
@@ -20,12 +23,7 @@ function Home({posts}) {
     <>
       <h1>Home</h1>
       <p>{text}</p>
-      {posts.map(post => (
-        <div key={post.id}>
-          <h3>{post.title}</h3>
-          <p>{post.post}</p>
-        </div>
-      ))}
+      <Posts posts={posts} />
     </>
   )
 }

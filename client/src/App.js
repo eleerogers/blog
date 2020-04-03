@@ -6,6 +6,7 @@ import Home from "./components/home";
 import About from "./components/about";
 import Compose from "./components/compose";
 import Contact from "./components/contact";
+import Post from './components/post';
 import './App.css';
 import axios from 'axios';
 
@@ -36,6 +37,9 @@ function App() {
           </Route>
           <Route path="/contact">
             <Contact />
+          </Route>
+          <Route path="/post/:id">
+            <Post />
           </Route>
         </Switch>
       </div>

@@ -12,6 +12,7 @@ function Navbar() {
           <li id="home"><Link to="/">HOME</Link></li>
           <li id="about"><Link to="/about">ABOUT US</Link></li>
           <li id="contact"><Link to="/contact">CONTACT US</Link></li>
+          <li id="compose"><Link to="/compose">COMPOSE</Link></li>
         </ul>
       </div>
     </nav>

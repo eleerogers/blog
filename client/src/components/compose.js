@@ -1,8 +1,9 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import useForm from "../hooks/useForm";
 import axios from "axios";
 
-function Compose({setPosts}) {
+function Compose({setPosts, history}) {
   const { values, handleChange, handleSubmit } = useForm(addPost);
 
   async function addPost() {
@@ -10,6 +11,7 @@ function Compose({setPosts}) {
       const {data} = await axios.post('/api/posts', values);
       console.log({data})
       setPosts(data);
+      history.push('/');
     } catch(err) {
       console.error(err);
     }
@@ -39,4 +41,4 @@ function Compose({setPosts}) {
   )
 }
 
-export default Compose;
+export default withRouter(Compose);
