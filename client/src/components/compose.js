@@ -29,6 +29,7 @@ function Compose({setPosts, history}) {
             value={values.title || ""} 
             className="form-control" 
             onChange={handleChange} 
+            autoComplete="off"
           />
         </div>
         <div className="form-group">
@@ -41,6 +42,7 @@ function Compose({setPosts, history}) {
             value={values.post || ""}
             className="form-control"
             onChange={handleChange}
+            autoComplete="off"
           />
         </div>
         <button type="submit" className="btn btn-primary">Publish</button>
