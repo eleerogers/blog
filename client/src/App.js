@@ -9,6 +9,7 @@ import Post from './components/post';
 import './App.css';
 import axios from 'axios';
 
+
 function App() {    
   const [posts, setPosts] = useState([]);
   const [pageInfos, setPageInfos] = useState({
@@ -22,7 +23,7 @@ function App() {
   useEffect(() => {
     async function getPosts() {
       const {data} = await axios.get('/api/posts');
-      console.log('postsss: ', data);
+      console.log('app getPosts: ', data);
       setPosts(data);
     }
     getPosts(); 
@@ -31,7 +32,7 @@ function App() {
   useEffect(() => {
     async function fetchPageInfos() {
       try {
-        const {data} = await axios('/api/pageInfos');
+        let {data} = await axios('/api/pageInfos');
         setPageInfos(data);
       } catch(err) {
         console.error(err);
@@ -57,7 +58,7 @@ function App() {
           <Route path="/contact">
             <Info contentObj={contactContent} />
           </Route>
-          <Route path="/post/:id">
+          <Route path="/post/:_id">
             <Post />
           </Route>
         </Switch>

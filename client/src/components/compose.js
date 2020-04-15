@@ -9,7 +9,8 @@ function Compose({setPosts, history}) {
   async function addPost() {
     try {
       const {data} = await axios.post('/api/posts', values);
-      setPosts(posts => [...posts, data.rows[0]]);
+      const newPost = (data.rows && data.rows[0]) || data;
+      setPosts(posts => [...posts, newPost]);
       history.push('/');
     } catch(err) {
       console.error(err);

@@ -2,11 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Posts({posts}) {
-  console.log('posts component: ', posts);
   const postDivs = posts.map(post => (
-    <div key={post.id}>
+    <div key={post._id}>
       <h3><Link to={{
-        pathname: `/post/${post.id}`,
+        pathname: `/post/${post._id}`,
         state: {
           post: post
         }
