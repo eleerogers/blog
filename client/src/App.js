@@ -22,6 +22,7 @@ function App() {
   useEffect(() => {
     async function getPosts() {
       const {data} = await axios.get('/api/posts');
+      console.log('postsss: ', data);
       setPosts(data);
     }
     getPosts(); 
@@ -48,13 +49,13 @@ function App() {
             <Home homeStartingContent={homeStartingContent} posts={posts} />
           </Route>
           <Route path="/about">
-            <Info content={aboutContent} />
+            <Info contentObj={aboutContent} />
           </Route>
           <Route path="/compose">
             <Compose setPosts={setPosts} />
           </Route>
           <Route path="/contact">
-            <Info content={contactContent} />
+            <Info contentObj={contactContent} />
           </Route>
           <Route path="/post/:id">
             <Post />

@@ -9,6 +9,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const { Pool } = require('pg');
 const generatePassword = require('password-generator');
 
 const app = express();
@@ -18,20 +19,41 @@ app.use(bodyParser.json());
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+const connectionString = process.env.SQL_CONNECTION_STRING;
+
+const pool = new Pool({
+  connectionString
+});
+
 app.get('/api/pageInfos', (req, res) => {
-  res.send({homeStartingContent, aboutContent, contactContent});
+  pool.query('SELECT * FROM blog WHERE type = $1', ["page_info"], (error, results) => {
+    const homeStartingContent = results.rows.find(row => row.title === 'Home')
+    const aboutContent = results.rows.find(row => row.title === 'About')
+    const contactContent = results.rows.find(row => row.title === 'Contact')
+    res.send({homeStartingContent, aboutContent, contactContent});
+  })
 })
 
 app.get('/api/posts', (req, res) => {
-  res.send(posts);
+  pool.query('SELECT * FROM blog WHERE type = $1', ["post"], (error, results) => {
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+    res.send(results.rows);
+  })
 })
 
 app.post('/api/posts', (req, res) => {
-  const prevId = posts[posts.length - 1].id;
-  const newId = prevId + 1;
-  const newPost = req.body;
-  posts = [...posts, { ...newPost, id: newId }];
-  res.send(posts);
+  console.log('POST!')
+  const { title, text } = req.body;
+  pool.query('INSERT INTO blog (title, text, type) VALUES ($1, $2, $3) RETURNING *', [title, text, "post"], (error, results) => {
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+    res.send(results);
+  })
 })
 
 // Put all API endpoints under '/api'

@@ -8,7 +8,7 @@ function Post() {
   return (
     <>
       <h1>{post.title}</h1>
-      <p>{post.post}</p>
+      <p>{post.text}</p>
     </>
   )
 }

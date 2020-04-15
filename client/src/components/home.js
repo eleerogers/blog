@@ -3,10 +3,9 @@ import Posts from './posts';
 import Info from './info';
 
 function Home({posts, homeStartingContent}) {
-
   return (
     <>
-      <Info content={homeStartingContent} />
+      <Info contentObj={homeStartingContent} />
       <Posts posts={posts} />
     </>
   )

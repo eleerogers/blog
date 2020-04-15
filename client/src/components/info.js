@@ -1,10 +1,11 @@
 import React from "react";
 
-function Info({content}) {
+function Info({contentObj}) {
+  
   return (
     <>
-      <h1>{content.title}</h1>
-      <p>{content.text}</p>
+      <h1>{contentObj.title}</h1>
+      <p>{contentObj.text}</p>
     </>
   )
 }

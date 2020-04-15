@@ -9,7 +9,7 @@ function Compose({setPosts, history}) {
   async function addPost() {
     try {
       const {data} = await axios.post('/api/posts', values);
-      setPosts(data);
+      setPosts(posts => [...posts, data.rows[0]]);
       history.push('/');
     } catch(err) {
       console.error(err);
@@ -33,13 +33,13 @@ function Compose({setPosts, history}) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="post">Post</label>
+          <label htmlFor="text">Post</label>
           <textarea
             rows="4"
             id="post"
-            name="post"
+            name="text"
             type="text"
-            value={values.post || ""}
+            value={values.text || ""}
             className="form-control"
             onChange={handleChange}
             autoComplete="off"

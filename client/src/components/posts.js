@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Posts({posts}) {
-
+  console.log('posts component: ', posts);
   const postDivs = posts.map(post => (
     <div key={post.id}>
       <h3><Link to={{
@@ -11,7 +11,7 @@ function Posts({posts}) {
           post: post
         }
       }}>{post.title}</Link></h3>
-      <p>{post.post}</p>
+      <p>{post.text}</p>
     </div>
   ))
 
