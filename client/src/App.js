@@ -23,7 +23,6 @@ function App() {
   useEffect(() => {
     async function getPosts() {
       const {data} = await axios.get('/api/posts');
-      console.log('app getPosts: ', data);
       setPosts(data);
     }
     getPosts(); 
@@ -42,7 +41,7 @@ function App() {
   }, [])
 
   return (
-    <div className="container App">
+    <div className="App">
       <Navbar />
       <div className="container">
         <Switch>

@@ -38,12 +38,16 @@ app.get('/api/posts', (req, res) => {
 })
 
 app.post('/api/posts', (req, res) => {
+  console.log('posting');
   const { title, text } = req.body;
+  console.log({title});
+  console.log({text});
   pool.query('INSERT INTO blog (title, text, type) VALUES ($1, $2, $3) RETURNING *', [title, text, "post"], (error, results) => {
     if (error) {
       console.error(error);
       throw error;
     }
+    console.log({results});
     res.send(results);
   })
 })

@@ -53,7 +53,6 @@ app.get('/api/pageInfos', (req, res) => {
       })
     }
     if (results.length > 0) {
-      console.log('infos greater than zero: ', results);
       const homeStartingContent = results.find(row => row.title === 'Home')
       const aboutContent = results.find(row => row.title === 'About')
       const contactContent = results.find(row => row.title === 'Contact')

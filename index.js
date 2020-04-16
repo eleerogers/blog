@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const { Pool } = require('pg');
 
 const app = express();
 
@@ -12,89 +12,45 @@ app.use(bodyParser.json());
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+const connectionString = process.env.SQL_CONNECTION_STRING;
 
-const blogSchema = new mongoose.Schema({
-  title: String,
-  text: String,
-  type: String
-}) 
-
-const Blog = mongoose.model("Blog", blogSchema);
-
-const INIT_DATA = [
-  {
-    title: "Home",
-    text: process.env.INIT_HOME_TXT,
-    type: "page_info"
-  },
-  {
-    title: "About",
-    text: process.env.INIT_ABOUT_TXT,
-    type: "page_info"
-  },
-  {
-    title: "Contact",
-    text: process.env.INIT_CONTACT_TXT,
-    type: "page_info"
-  },
-]
+const pool = new Pool({
+  connectionString
+});
 
 app.get('/api/pageInfos', (req, res) => {
-  Blog.find({ type: "page_info" }, (error, results) => {
-    if (!results || results.length === 0) {
-      Blog.insertMany(INIT_DATA, (error, docs) => {
-        if (error) {
-          console.error(error);
-        } else {
-          console.log(`inserted ${docs}`);
-          res.redirect('/api/pageInfos');
-        }
-      })
-    }
-    if (results.length > 0) {
-      console.log('infos greater than zero: ', results);
-      const homeStartingContent = results.find(row => row.title === 'Home')
-      const aboutContent = results.find(row => row.title === 'About')
-      const contactContent = results.find(row => row.title === 'Contact')
-      res.send({homeStartingContent, aboutContent, contactContent});
-    }
-  })
-})
-
-app.post('/api/pageInfos', (req, res) => {
-  console.log('post pageInfos!');
-  const pageInfos = req.body;
-  console.log('pageInfos: ', pageInfos);
-  Blog.insertMany(pageInfos, (error, docs) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log(`inserted ${docs}`);
-      res.send(docs);
-    }
+  pool.query('SELECT * FROM blog WHERE type = $1', ["page_info"], (error, results) => {
+    const homeStartingContent = results.rows.find(row => row.title === 'Home')
+    const aboutContent = results.rows.find(row => row.title === 'About')
+    const contactContent = results.rows.find(row => row.title === 'Contact')
+    res.send({homeStartingContent, aboutContent, contactContent});
   })
 })
 
 app.get('/api/posts', (req, res) => {
-  Blog.find({ type: "post" }, (error, results) => {
-    res.send(results);
+  pool.query('SELECT * FROM blog WHERE type = $1', ["post"], (error, results) => {
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+    res.send(results.rows);
   })
 })
 
 app.post('/api/posts', (req, res) => {
+  console.log('posting');
   const { title, text } = req.body;
-  const newPost = new Blog({ title, text, type: "post" });
-  newPost.save((err, item) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log(`succesfully added ${item.title}`);
+  console.log({title});
+  console.log({text});
+  pool.query('INSERT INTO blog (title, text, type) VALUES ($1, $2, $3) RETURNING *', [title, text, "post"], (error, results) => {
+    if (error) {
+      console.error(error);
+      throw error;
     }
-    res.send(item);
+    console.log({results});
+    res.send(results);
   })
 })
-
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
